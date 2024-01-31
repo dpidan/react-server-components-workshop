@@ -1,0 +1,4 @@
+name = "region-worker-daniel"
+main = "./dist-region/index.js"
+compatibility_date = "2023-11-09"
+compatibility_flags = ["nodejs_compat"]

@@ -1,6 +1,7 @@
 "use server";
 
 import { Suspense } from "react";
+import { BrowserReact } from "../../../utils/BrowserReact.js";
 import { Counter } from "./Counter.js";
 import { Todos } from "./Todos.js";
 
@@ -9,8 +10,12 @@ export function App() {
 		<html lang="en">
 			<head>
 				<meta charSet="utf-8" />
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<title>5 | Server Actions</title>
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1"
+				/>
+				<title>5 | RSC compiler</title>
+				<BrowserReact />
 			</head>
 			<body>
 				<div>
@@ -22,6 +27,7 @@ export function App() {
 						<Todos />
 					</Suspense>
 				</div>
+				<script type="module" src="/src/index.js"></script>
 			</body>
 		</html>
 	);

@@ -8,10 +8,10 @@
 
 **Make sure you're in the `./exercises/6-server-actions` directory!**
 
-1.  Server Actions are typically mutations, so let's introduce some state to our application by first creating a D1 database. When creating a D1 database, you can provide a "location hint" which is a way to express a preference of some specific area in the world. You can see the list of options by running `npx wrangler d1 create --help`. Create a database called `rsc-workshop` with a **different** region than where you are right now. I'm in New York, so I chose `weur` (Western Europe):
+1.  Server Actions are typically mutations, so let's introduce some state to our application by first creating a D1 database. When creating a D1 database, you can provide a "location hint" which is a way to express a preference of some specific area in the world. You can see the list of options by running `npx wrangler d1 create --help`. Create a database called `rsc-workshop-daniel` with a **different** region than where you are right now. I'm in New York, so I chose `weur` (Western Europe):
 
     ```sh
-    npx wrangler d1 create --location weur rsc-workshop
+    npx wrangler d1 create --location weur rsc-workshop-daniel
     ```
 
 1.  Wrangler will print out a snippet of TOML which we can copy into our `wrangler-region.toml` and then add one extra line to (`migrations_dir = "./migrations"` to opt us into using migrations). **Also make sure you use your own database ID!**.
@@ -19,14 +19,14 @@
     ```toml
     # ./wrangler-region.toml
 
-    name = "region-worker"
+    name = "region-worker-daniel"
     main = "./dist-region/index.js"
     compatibility_date = "2023-11-09"
     compatibility_flags = ["nodejs_compat"]
 
     [[d1_databases]]
     binding = "DB"
-    database_name = "rsc-workshop"
+    database_name = "rsc-workshop-daniel"
     database_id = "c8fac4c5-c6cd-4d58-a852-c14e7f6e9503" # REPLACE THIS WITH YOUR ID!
     migrations_dir = "./migrations" # ADD THIS LINE
     ```
@@ -34,7 +34,7 @@
 1.  Next, let's run another command to create a database migration for our table schema:
 
     ```sh
-    npx wrangler -c wrangler-region.toml d1 migrations create rsc-workshop init
+    npx wrangler -c wrangler-region.toml d1 migrations create rsc-workshop-daniel init
     ```
 
     If you're asked `Ok to create .../migrations? › (Y/n)`, just hit Enter to confirm using that directory.
@@ -59,11 +59,11 @@
 1.  And let's apply that migration both locally and remotely:
 
     ```sh
-    npx wrangler -c wrangler-region.toml d1 migrations apply --local rsc-workshop
+    npx wrangler -c wrangler-region.toml d1 migrations apply --local rsc-workshop-daniel
     ```
 
     ```sh
-    npx wrangler -c wrangler-region.toml d1 migrations apply rsc-workshop
+    npx wrangler -c wrangler-region.toml d1 migrations apply rsc-workshop-daniel
     ```
 
     Accept any `Your database may not be available to serve requests during the migration, continue? › (Y/n)` prompts by hitting Enter.
@@ -71,11 +71,11 @@
 1.  Let's populate it with some data:
 
     ```sh
-    npx wrangler -c wrangler-region.toml d1 execute --local rsc-workshop --command "INSERT INTO note (title, body) VALUES ('Hello, world!', 'Today is November 14'), ('I discovered time travel!', 'Today is November 15');"
+    npx wrangler -c wrangler-region.toml d1 execute --local rsc-workshop-daniel --command "INSERT INTO note (title, body) VALUES ('Hello, world!', 'Today is November 14'), ('I discovered time travel!', 'Today is November 15');"
     ```
 
     ```sh
-    npx wrangler -c wrangler-region.toml d1 execute rsc-workshop --command "INSERT INTO note (title, body) VALUES ('Hello, world!', 'Today is November 14'), ('I discovered time travel!', 'Today is November 15');"
+    npx wrangler -c wrangler-region.toml d1 execute rsc-workshop-daniel --command "INSERT INTO note (title, body) VALUES ('Hello, world!', 'Today is November 14'), ('I discovered time travel!', 'Today is November 15');"
     ```
 
 1.  We've made this database available to the region Worker by adding it to our `wrangler-region.toml`. Let's also type it so our React app can know about it:

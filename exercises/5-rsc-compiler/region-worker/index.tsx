@@ -1,10 +1,9 @@
 import React from "react";
 import { renderToReadableStream } from "react-server-dom-esm/server";
 import { App } from "../src/App.js";
-import type { RegionEnvironment } from "../types.js";
 
-function renderApp(env: RegionEnvironment) {
-	const root = React.createElement(App, { env });
+function renderApp() {
+	const root = React.createElement(App);
 	return renderToReadableStream(root, {
 		baseURL: "/src",
 		transform: (url) => url.replace(/\.(t|j)sx?/, ".js"),
@@ -12,8 +11,8 @@ function renderApp(env: RegionEnvironment) {
 }
 
 export default {
-	async fetch(request, env) {
-		const readableStream = renderApp(env);
+	async fetch(request) {
+		const readableStream = renderApp();
 		return new Response(readableStream);
 	},
-} as ExportedHandler<RegionEnvironment>;
+} as ExportedHandler;

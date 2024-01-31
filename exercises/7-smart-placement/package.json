@@ -7,7 +7,7 @@
 		"build:watch": "npx nodemon --exec \"npm run build\"",
 		"predeploy": "npx cross-env NODE_ENV=production npm run build",
 		"deploy": "npm run deploy:region && npm run deploy:global",
-		"deploy:global": "npx wrangler pages deploy ./dist-global --project-name=rsc-workshop",
+		"deploy:global": "npx wrangler pages deploy ./dist-global --project-name=rsc-workshop-daniel",
 		"deploy:region": "npx wrangler deploy -c wrangler-region.toml",
 		"dev": "npx concurrently \"npm:build:watch\" \"npm:start\"",
 		"prestart": "npm run build",

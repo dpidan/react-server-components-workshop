@@ -14,7 +14,7 @@
 
 1.  So far, we've presented server-side rendering and Server Components as somewhat intertwined concepts. This has actually been a small lie. Instead, we need to break out the Server Components piece of our application, out into its own separate "app". This clear distinction will allow us to produce two clearly defined bundles: one which can render our Server Components, and one which can render our Client Components.
 
-    Let's start by making a new Cloudflare Worker. We'll call this one our `region-worker`, in contrast with the `global-worker` we already have:
+    Let's start by making a new Cloudflare Worker. We'll call this one our `region-worker-daniel`, in contrast with the `global-worker` we already have:
 
     ```tsx
     // ./region-worker/index.tsx
@@ -152,7 +152,7 @@
     		"build:watch": "npx nodemon --exec \"npm run build\"",
     		"predeploy": "npx cross-env NODE_ENV=production npm run build",
     		"deploy": "npm run deploy:region && npm run deploy:global",
-    		"deploy:global": "npx wrangler pages deploy ./dist-global --project-name=rsc-workshop",
+    		"deploy:global": "npx wrangler pages deploy ./dist-global --project-name=rsc-workshop-daniel",
     		"deploy:region": "npx wrangler deploy -c wrangler-region.toml",
     		"dev": "npx concurrently \"npm:build:watch\" \"npm:start\"",
     		"prestart": "npm run build",
@@ -163,20 +163,20 @@
     }
     ```
 
-    Here, we're just starting up our `region-worker` alongside our `global-worker` with the help of the `concurrently` package.
+    Here, we're just starting up our `region-worker-daniel` alongside our `global-worker` with the help of the `concurrently` package.
 
 1.  You might notice we've referenced a `wrangler-region.toml` file in the earlier step. That doesn't exist yet, so let's create that now:
 
     ```toml
     # ./wrangler-region.toml
 
-    name = "region-worker"
+    name = "region-worker-daniel"
     main = "./dist-region/index.js"
     compatibility_date = "2023-11-09"
     compatibility_flags = ["nodejs_compat"]
     ```
 
-    This lets Cloudflare know what we want to call the Worker, where we can find its code, and how we want to run it (with Node.js internals made available to it). We should now be in a place where we can run this `region-worker` and see what all this work has bought us.
+    This lets Cloudflare know what we want to call the Worker, where we can find its code, and how we want to run it (with Node.js internals made available to it). We should now be in a place where we can run this `region-worker-daniel` and see what all this work has bought us.
 
 1.  Run `npm run dev` and visit [`http://localhost:9005/`](http://localhost:9005/) this time, not _8005_! You should be greeted with a screen of, what looks like on first glance, gibberish. In fact, this is a streamed serialization of our React app. Try running `curl http://localhost:9005/` to see the delay in our Todos data!
 
@@ -265,7 +265,7 @@
     		define: {
     			REGION_WORKER_URL: JSON.stringify(
     				process.env.NODE_ENV === "production"
-    					? `http://region-worker.${CLOUDFLARE_WORKERS_SUBDOMAIN}/`
+    					? `http://region-worker-daniel.${CLOUDFLARE_WORKERS_SUBDOMAIN}/`
     					: "http://localhost:9005/",
     			),
     			"process.env.NODE_ENV": JSON.stringify("development"),
@@ -277,7 +277,7 @@
     // ...
     ```
 
-    Here, we're still turning our app into HTML, but we're using the `region-worker` as the source of truth for what to render, rather than our application source code. This allows the `region-worker` to control our app's data loading.
+    Here, we're still turning our app into HTML, but we're using the `region-worker-daniel` as the source of truth for what to render, rather than our application source code. This allows the `region-worker-daniel` to control our app's data loading.
 
 1.  Finally, we've changed how our app is SSR'd, so we also need to make some changes to how the browser/client works too:
 
@@ -369,4 +369,4 @@
     ReactDOM.hydrateRoot(document, createElement(Shell, { data }));
     ```
 
-    We've added in `<BrowserScripts />`, a small utility component responsible for loading the React code on the client, and we've changed our bootstrap `./src/index.tsx` to now use this `createFromFetch()` function in hydration. This is the final piece we needed to glue our application together across all three instances: the RSC backend (`region-worker`), the SSR global Worker (`global-worker`) and the client/browser. You should now be able to `npm run dev` and see the entire app running on [`http://localhost:8005/`](http://localhost:8005/).
+    We've added in `<BrowserScripts />`, a small utility component responsible for loading the React code on the client, and we've changed our bootstrap `./src/index.tsx` to now use this `createFromFetch()` function in hydration. This is the final piece we needed to glue our application together across all three instances: the RSC backend (`region-worker-daniel`), the SSR global Worker (`global-worker`) and the client/browser. You should now be able to `npm run dev` and see the entire app running on [`http://localhost:8005/`](http://localhost:8005/).

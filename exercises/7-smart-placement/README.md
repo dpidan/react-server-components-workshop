@@ -14,7 +14,7 @@
     ```toml
     # ./wrangler-region.toml
 
-    name = "region-worker"
+    name = "region-worker-daniel"
     main = "./dist-region/index.js"
     compatibility_date = "2023-11-09"
     compatibility_flags = ["nodejs_compat"]
@@ -24,8 +24,8 @@
 
     [[d1_databases]]
     binding = "DB"
-    database_name = "rsc-workshop"
-    database_id = "ab0d1bb7-0640-4bc2-9e6f-9f663bed2654" # REPLACE THIS WITH YOUR ID!
+    database_name = "rsc-workshop-daniel"
+    database_id = "f2f3d1d0-e659-4daf-96e8-fd120c280e46" # REPLACE THIS WITH YOUR ID!
     migrations_dir = "./migrations"
 
     ```

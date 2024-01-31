@@ -66,7 +66,7 @@
 
 1. Now, we're going to actually deploy this and make it available on the internet.
 
-   First, run `npx wrangler pages project create rsc-workshop`. `rsc-workshop` will be the name of the project we're creating. When prompted for `? Enter the production branch name: › `, just hit Enter to use `main`.
+   First, run `npx wrangler pages project create rsc-workshop-daniel`. `rsc-workshop-daniel` will be the name of the project we're creating. When prompted for `? Enter the production branch name: › `, just hit Enter to use `main`.
 
    Next, add the following `deploy` and `predeploy` scripts to your `package.json`:
 
@@ -77,7 +77,7 @@
    		"build": "node --loader=tsm ./scripts/build.ts",
    		"build:watch": "npx nodemon --exec \"npm run build\"",
    		"predeploy": "npm run build",
-   		"deploy": "npx wrangler pages deploy ./dist-global --project-name=rsc-workshop",
+   		"deploy": "npx wrangler pages deploy ./dist-global --project-name=rsc-workshop-daniel",
    		"dev": "npx concurrently \"npm:build:watch\" \"npm:start\"",
    		"prestart": "npm run build",
    		"start": "npx wrangler pages dev --port=8002 --no-bundle ./dist-global"

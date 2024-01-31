@@ -27,7 +27,7 @@ async function buildGlobalWorker() {
 		define: {
 			REGION_WORKER_URL: JSON.stringify(
 				process.env.NODE_ENV === "production"
-					? `http://region-worker.${CLOUDFLARE_WORKERS_SUBDOMAIN}/`
+					? `http://region-worker-daniel.${CLOUDFLARE_WORKERS_SUBDOMAIN}/`
 					: "http://localhost:9006/",
 			),
 			"process.env.NODE_ENV": JSON.stringify("development"),
